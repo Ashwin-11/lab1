@@ -6,7 +6,6 @@ namespace CarSimulator
         protected double mass;
         protected string model;
         protected double dragArea; // typo: the user enters A*C_d , dragAre=area * drag coefficient
-        //protected double dragCoef;
         protected double engineForce;
 
         public State myCarState= new State();  
@@ -72,8 +71,6 @@ namespace CarSimulator
             mass = 1000;
             engineForce = 750;
             dragArea = 0.43;
-           // dragCoef = 1;
-            //base class constructor sould be called automatically when object of class prius is made
         }
         public Prius(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
         {
@@ -81,7 +78,6 @@ namespace CarSimulator
             this.mass = mass;
             this.engineForce = engineForce;
             this.dragArea = dragArea;
-          //  this.dragCoef = dragCoef;
         }
     }
 
@@ -93,13 +89,6 @@ namespace CarSimulator
             mass = 1500;
             engineForce = 1000; 
             dragArea=0.51;
-           // dragCoef = 1;
-
-            /*myCarState.velocity =0.0;
-            myCarState.time = 0.0;
-            myCarState.position = 0.0;
-            myCarState.acceleration = 0.0;*/
-            //base class constructor sould be called automatically when object of class prius is made
         }
         public Tesla(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
         {
@@ -107,7 +96,6 @@ namespace CarSimulator
             this.mass = mass;
             this.engineForce = engineForce;
             this.dragArea = dragArea;
-           // this.dragCoef = dragCoef;
         }
     }
 
@@ -119,12 +107,6 @@ namespace CarSimulator
             mass = 1400;
             engineForce = 755;
             dragArea = 0.4;
-           // dragCoef = 1;
-            /*myCarState.velocity =0.0;
-            myCarState.time = 0.0;
-            myCarState.position = 0.0;
-            myCarState.acceleration = 0.0;*/
-            //base class constructor sould be called automatically when object of class prius is made
         }
         public Mazda(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
         {
@@ -132,7 +114,6 @@ namespace CarSimulator
             this.mass = mass;
             this.engineForce = engineForce;
             this.dragArea = dragArea;
-            //this.dragCoef = dragCoef;
         }
     }
 
@@ -144,12 +125,6 @@ namespace CarSimulator
             mass = 1400;
             engineForce = 1000;
             dragArea = 0;
-          //  dragCoef = 0;
-            /*myCarState.velocity =0.0;
-            myCarState.time = 0.0;
-            myCarState.position = 0.0;
-            myCarState.acceleration = 0.0;*/
-            //base class constructor sould be called automatically when object of class prius is made
         }
         public Herbie(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
         {
@@ -157,15 +132,12 @@ namespace CarSimulator
             this.mass = mass;
             this.engineForce = engineForce;
             this.dragArea = dragArea;
-            //this.dragCoef = dragCoef;
         }
 
         public override void drive(double dt)
         {
             // TODO: COMPUTE UPDATED STATE HERE
             double fd, x1;
-            //double rho = 1.225;
-
             fd = 0;//no drag fir herbie
             myCarState.acceleration = CarSimulator.Physics1D.compute_acceleration(engineForce - fd, mass);
             x1 = CarSimulator.Physics1D.compute_position(myCarState.position, myCarState.velocity, dt);
