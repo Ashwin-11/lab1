@@ -8,28 +8,38 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "/Users/ali/.nuget/packages/": {}
+    "C:\\Users\\ashwi\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/ali/github/csharp/CPEN333/labs/lab1/lab1_public/lab1/CarSimulator/CarSimulator.csproj",
+      "projectUniqueName": "C:\\Users\\ashwi\\Documents\\GitHub\\lab1\\CarSimulator\\CarSimulator.csproj",
       "projectName": "CarSimulator",
-      "projectPath": "/Users/ali/github/csharp/CPEN333/labs/lab1/lab1_public/lab1/CarSimulator/CarSimulator.csproj",
-      "packagesPath": "/Users/ali/.nuget/packages/",
-      "outputPath": "/Users/ali/github/csharp/CPEN333/labs/lab1/lab1_public/lab1/CarSimulator/obj/",
+      "projectPath": "C:\\Users\\ashwi\\Documents\\GitHub\\lab1\\CarSimulator\\CarSimulator.csproj",
+      "packagesPath": "C:\\Users\\ashwi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ashwi\\Documents\\GitHub\\lab1\\CarSimulator\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "/Users/ali/.config/NuGet/NuGet.Config"
+        "C:\\Users\\ashwi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -41,6 +51,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "imports": [
           "net461",
           "net462",
@@ -56,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.402/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
