@@ -1,0 +1,407 @@
+using System;
+namespace CarSimulator
+{
+
+    public class Physics1D
+    {
+        // Implement the methods
+        public static double compute_position(double x0, double v, double dt)
+        { // to do
+            double x1 = x0 + v * dt;
+
+            return x1;
+        }
+        public static double compute_velocity(double v0, double a, double dt)
+        { // to do
+            double v1= v0 + a * dt;
+            return v1;
+        }
+        public static double compute_velocity(double x0, double t0, double x1, double t1)
+        {
+            double v1 = (x1 - x0) / (t1 - t0);
+            return v1;
+        }
+        public static double compute_acceleration(double v0, double t0, double v1, double t1)
+        { 
+            double a1 = (v1 - v0) / (t1 - t0);
+            return a1;
+        }
+        public static double compute_acceleration(double f, double m)
+        { 
+            return f/m;
+        }
+    }
+}
+
+
+using System;
+
+namespace CarSimulator
+{
+    class Program
+    {
+          static void Main(string[] args)
+        {
+            // read in car mass
+            Console.WriteLine("Enter the mass of the car (kg): ");
+            double mass;
+            mass = Convert.ToDouble(Console.ReadLine());
+
+            // read in engine force
+            Console.WriteLine("Enter the net force of the engine (N): ");
+            double engine_force;
+            engine_force = Convert.ToDouble(Console.ReadLine());
+
+            // read in drag area coefficient
+            Console.WriteLine("Enter the car's drag area*drag coefficient(A*C_d in m^2): "); // typo: the user enters A*C_d , area * drag coefficient
+            double drag_area;
+            drag_area = Convert.ToDouble(Console.ReadLine());
+
+            // read in time step
+            Console.WriteLine("Enter the simulation time step (s): ");
+            double dt;
+            dt = Convert.ToDouble(Console.ReadLine());
+
+            // read in total number of simulation steps
+            Console.WriteLine("Enter the number of time steps (int): ");
+            int N;
+            N = Convert.ToInt32(Console.ReadLine());
+
+            // initialize the car's state
+            double x0 = 0;  // initial position
+            double v = 0;  // initial velocity
+            double t = 0;  // initial time
+            double fd, x1, a; // drag force and secondary position and acceleration
+            double rho = 1.225;// kg / m3
+            
+
+            // run the simulation
+            for (int i = 0; i < N; ++i)
+            {
+                // TODO: COMPUTE UPDATED STATE HERE
+                fd = (1.0/2.0)*rho*v*v*drag_area; // where drag_area=A*C_d
+                a = CarSimulator.Physics1D.compute_acceleration(engine_force-fd, mass);
+                x1 = CarSimulator.Physics1D.compute_position(x0, v, dt);
+                v = CarSimulator.Physics1D.compute_velocity(v, a, dt);
+                x0 = x1;
+                t += dt;  // increment time
+
+                // print the time and current state
+                Console.WriteLine("t:{0}, a:{1}, v:{2}, x1:{3}, fd:{4} ", t, a, v, x1, fd);
+            }
+        }
+    }
+}
+
+using System;
+namespace CarSimulator
+{
+    public class State
+    {
+        public double position;
+        public double velocity;
+        public double acceleration;
+        public double time;
+
+        //implement methods like set, constructors (if applicable)
+        public State()
+        {
+            this.position = 0.0;
+            this.velocity = 0.0;
+            this.acceleration = 0.0;
+            this.time = 0.0;
+        }
+
+        public State(double position, double velocity, double acceleration, double time)
+        {
+            this.position = position;
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+            this.time = time;
+        }
+
+        public void set (double position, double velocity, double acceleration, double time)
+        {
+            this.position = position;
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+            this.time = time;
+        }
+    }
+}
+
+using System;
+
+namespace CarSimulator
+{
+    class TestStateClass
+    {
+        static void Main(string[] args)
+        {
+            State car = new State();
+
+            Console.WriteLine("Car position:{0}", car.position);
+            Console.WriteLine("Car velocity:{0}", car.velocity);
+            Console.WriteLine("Car acceleration:{0}", car.acceleration);
+            Console.WriteLine("Car time:{0}", car.time);
+
+            car.set(1.0, 2.0, 3.0, 4.0);
+            Console.WriteLine("Car position:{0}", car.position);
+            Console.WriteLine("Car velocity:{0}", car.velocity);
+            Console.WriteLine("Car acceleration:{0}", car.acceleration);
+            Console.WriteLine("Car time:{0}", car.time);
+        }
+    
+    }
+}
+
+
+
+using System;
+namespace CarSimulator
+{
+    public class Car
+    {
+        protected double mass;
+        protected string model;
+        protected double dragArea; // typo: the user enters A*C_d , dragAre=area * drag coefficient
+        protected double engineForce;
+
+        public State myCarState= new State();  
+        /// implement constructor and methods
+        public Car()
+        {
+            //this.rho = 1.225; 
+            myCarState.velocity = 0.0;
+            myCarState.time = 0.0;
+            myCarState.position = 0.0;
+            myCarState.acceleration = 0.0;
+        }
+        public Car(string model, double mass, double engineForce, double dragArea)
+        {
+            this.mass = mass;
+            this.model = model;
+            this.dragArea = dragArea;
+            this.engineForce = engineForce;
+          //  this.dragCoef = dragCoef;
+        }
+        public string getModel()
+        {
+            return this.model;
+        }
+        public double getMass()
+        {
+            return this.mass;
+        }
+        public State getState()
+        {
+            return this.myCarState;
+        }
+        public void accelerate(bool on)
+        {
+
+        }
+        public virtual void drive(double dt)
+        {
+            // TODO: COMPUTE UPDATED STATE HERE
+                double fd;
+                double rho = 1.225;
+                myCarState.time += dt;
+                fd = (1.0 / 2.0) * rho * (myCarState.velocity) * (myCarState.velocity)*dragArea;
+                myCarState.acceleration = CarSimulator.Physics1D.compute_acceleration(engineForce - fd,mass);
+
+                double a0 = myCarState.acceleration;
+                double v0 = myCarState.velocity;
+                double x0 = myCarState.position;
+                myCarState.position = CarSimulator.Physics1D.compute_position(x0, v0, dt);
+                myCarState.velocity = CarSimulator.Physics1D.compute_velocity(v0, a0, dt);
+        }
+
+        //implement inheritence
+        
+
+    }
+
+    public class Prius : Car
+    {
+        public Prius() : base()
+        {
+            model = "Prius";
+            mass = 1000;
+            engineForce = 750;
+            dragArea = 0.43;
+        }
+        public Prius(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
+        {
+            this.model = model;
+            this.mass = mass;
+            this.engineForce = engineForce;
+            this.dragArea = dragArea;
+        }
+    }
+
+    public class Tesla : Car
+    {
+        public Tesla() : base()
+        {
+            model = "Tesla";
+            mass = 1500;
+            engineForce = 1000; 
+            dragArea=0.51;
+        }
+        public Tesla(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
+        {
+            this.model = model;
+            this.mass = mass;
+            this.engineForce = engineForce;
+            this.dragArea = dragArea;
+        }
+    }
+
+    public class Mazda : Car
+    {
+        public Mazda() : base()
+        {
+            model = "Mazda";
+            mass = 1400;
+            engineForce = 755;
+            dragArea = 0.4;
+        }
+        public Mazda(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
+        {
+            this.model = model;
+            this.mass = mass;
+            this.engineForce = engineForce;
+            this.dragArea = dragArea;
+        }
+    }
+
+    public class Herbie : Car
+    {
+        public Herbie() : base()
+        {
+            model = "Herbie";
+            mass = 1400;
+            engineForce = 1000;
+            dragArea = 0;
+        }
+        public Herbie(string model, double mass, double engineForce, double dragArea) : base(model, mass, engineForce, dragArea)
+        {
+            this.model = model;
+            this.mass = mass;
+            this.engineForce = engineForce;
+            this.dragArea = dragArea;
+        }
+
+        public override void drive(double dt)
+        {
+            // TODO: COMPUTE UPDATED STATE HERE
+            double fd, x1;
+            fd = 0;//no drag fir herbie
+            myCarState.acceleration = CarSimulator.Physics1D.compute_acceleration(engineForce - fd, mass);
+            x1 = CarSimulator.Physics1D.compute_position(myCarState.position, myCarState.velocity, dt);
+            myCarState.velocity = CarSimulator.Physics1D.compute_velocity(myCarState.velocity, myCarState.acceleration, dt);
+            myCarState.position = x1;
+            myCarState.time += dt;
+        }
+    }
+}
+
+
+using System;
+namespace CarSimulator
+{
+    public class Dragrace
+    {
+        static void Main(string[] args)
+        {
+
+            Car myTesla = new Car("Tesla", 1500, 1000, 0.51);     
+            Car myPrius = new Car("Prius", 1000, 750, 0.43);
+            string winner="";
+            // drive for 60 seconds with delta time of 1s
+            double dt = 1;
+
+            for (double t = 0; t < 60; t += dt)
+            {
+                // print the time and current state
+                myTesla.drive(dt);
+                myPrius.drive(dt);
+                Console.WriteLine("t:{0}, a:{1}, v:{2}, x1:{3}", t, myTesla.myCarState.acceleration, myTesla.myCarState.velocity, myTesla.myCarState.position);
+                Console.WriteLine("t:{0}, a:{1}, v:{2}, x1:{3}", t, myPrius.myCarState.acceleration, myPrius.myCarState.velocity, myPrius.myCarState.position);
+
+                // print who is in lead
+                if (myTesla.myCarState.position > myPrius.myCarState.position)
+                    Console.WriteLine("TESLA is ahead of PRIUS");
+                else if (myTesla.myCarState.position==myPrius.myCarState.position)
+                    Console.WriteLine("CARS are at SAME Position");
+                else
+                    Console.WriteLine("PRIUS is ahead of TESLA");
+
+                if(myTesla.myCarState.position>402.3 && myPrius.myCarState.position > 402.3)
+                {
+                    if (myTesla.myCarState.position > myPrius.myCarState.position)
+                        winner = myTesla.getModel();
+                    else
+                        winner = myPrius.getModel();
+
+                    break;
+                }
+            }
+            Console.WriteLine("Race Over, Winner of Race is: "+winner);
+        }
+    }
+}
+
+
+
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace CarSimulator
+{
+    public class Highway
+    {
+        static void Main(string[] args)
+        {
+            int fleetNumberPerType = 25;
+            double dt = 1;
+
+
+            //Step 1: implement fleets of arrays/lists per vehicle type
+            // and compute states
+            // create fleets
+           
+            /* Commenting out the other method of declaring the array of cars that works
+            Tesla[] myTeslas= Enumerable.Range(0, fleetNumberPerType-1).Select(x => new Tesla()).ToArray(); //suggestion given in lab manual did not work for me
+            Prius[] myPriuses = Enumerable.Range(0, fleetNumberPerType - 1).Select(x => new Prius()).ToArray();
+            Mazda[] myMazdas = Enumerable.Range(0, fleetNumberPerType - 1).Select(x => new Mazda()).ToArray();
+            Herbie[] myHerbies = Enumerable.Range(0, fleetNumberPerType - 1).Select(x => new Herbie()).ToArray();
+            */
+
+            //Step 2: implement all the fleet in one list and compute states
+            var myCars = new List<Car>();
+
+            for (int i = 0; i < fleetNumberPerType; i++)
+            {
+                myCars.Add(new CarSimulator.Tesla());
+                myCars.Add(new CarSimulator.Prius());
+                myCars.Add(new CarSimulator.Mazda());
+                myCars.Add(new CarSimulator.Herbie());
+            }
+
+            // loop through the time and list to drive all the vehicles
+            for (double t = 0; t < 60; t += dt)
+            {
+                for (int i = 0; i < fleetNumberPerType*4; i++)
+                {
+                    // TO DO: Drive myCars list and Display the cars states acceleration, speed, position, etc
+                    myCars[i].drive(dt);
+                    Console.WriteLine("Car{0}: Model:{1:F3}, time:{2:F3}, acceleration:{3:F3}, velocity:{4:F3}, position:{5:F3} ", i+1, myCars[i].getModel(), t, myCars[i].myCarState.acceleration, myCars[i].myCarState.velocity, myCars[i].myCarState.position);
+                }
+            }
+        }
+
+    }
+}
